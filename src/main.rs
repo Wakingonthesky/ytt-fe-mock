@@ -66,7 +66,7 @@ struct MyObj {
     name: String,
 }
 
-#[post("/a/login_phone")]
+#[post("/v2/lr/login_phone")]
 async fn index(name: web::Path<String>) -> Result<impl Responder> {
     let obj = MyObj {
         name: name.to_string(),
