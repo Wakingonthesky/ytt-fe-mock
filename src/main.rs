@@ -1,3 +1,5 @@
+use std::iter::Map;
+
 /*
 use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder, Result};
 use serde::{Deserialize, Serialize};
@@ -63,13 +65,31 @@ async fn echo(req_body: String) -> impl Responder {
 
 #[derive(Serialize, Deserialize)]
 struct MyObj {
-    name: String,
+    result: ResultInfo,
+    code: i16,
+    message: String,
 }
 
+#[derive(Serialize, Deserialize)]
+struct ResultInfo{
+    user_id: String,
+    refresh_token: String,
+    access_token: String,
+}
+
+
+
 #[post("/v2/lr/login_phone")]
-async fn index(name: web::Path<String>) -> Result<impl Responder> {
+async fn login_phone() -> Result<impl Responder> {
+    let ri = ResultInfo{
+        user_id: String::from("1234"),
+        refresh_token: String::from("12345"),
+        access_token: String::from("12345"),
+    };
     let obj = MyObj {
-        name: name.to_string(),
+        result: ri,
+        code: 200,
+        message: String::from("test")
     };
     Ok(web::Json(obj))
 }
@@ -84,7 +104,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(hello)
             .service(echo)
-            .service(index)
+            .service(login_phone)
             .route("/hey", web::get().to(manual_hello))
     })
     .bind(("127.0.0.1", 8095))?
